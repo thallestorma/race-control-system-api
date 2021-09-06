@@ -11,10 +11,11 @@ services:
     volumes:
       - ./api:/var/www/app
     networks:
-      - mysql-compose-network
+      mysql-compose-network:
+        ipv4_address: 172.21.0.3
   db:
     container_name: mysql-api
-    image: mysql
+    image: mysql:5.7
     command: --default-authentication-plugin=mysql_native_password
     restart: always
     ports:
@@ -24,7 +25,12 @@ services:
     volumes:
       - ./mysql:/var/lib/mysql
     networks:
-      - mysql-compose-network
+      mysql-compose-network:
+        ipv4_address: 172.21.0.9
 
 networks:
   mysql-compose-network:
+    ipam:
+      driver: default
+      config:
+        - subnet: '172.21.0.4/24'
